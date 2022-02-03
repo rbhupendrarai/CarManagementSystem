@@ -1,0 +1,57 @@
+﻿using CarManagementSystem.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CarManagementSystem.Data.Entities
+{
+    [Table("Images")]
+    public class Images
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Img_Id { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar")]
+        [StringLength(30)]
+        [Display(Name = "Image Name")]
+        public string Img_Name { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar")]
+        [StringLength(100)]
+        [Display(Name = "Image")]
+        public string Img { get; set; }
+        [Required]
+        [Column(TypeName = "DateTime")]
+        [Display(Name = "Created Date")]
+        public DateTime? CreatedDate { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar")]
+        [StringLength(30)]
+        [Display(Name = "Created By")]
+        public string CreatedBy { get; set; }
+
+        [Required]
+        [Column(TypeName = "DateTime")]
+        [StringLength(30)]
+        [Display(Name = "Modified Date")]
+        public DateTime? ModifiedDate { get; set; }
+
+        [Required]
+        [Column(TypeName = "varchar")]
+        [StringLength(30)]
+        [Display(Name = "Modified By")]
+        public string ModifiedBy { get; set; }
+
+        public Model MO_Id{ get; set; }
+
+
+    }
+}
