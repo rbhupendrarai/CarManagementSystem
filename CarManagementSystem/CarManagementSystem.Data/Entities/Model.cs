@@ -56,9 +56,9 @@ namespace CarManagementSystem.Data.Models
         [Display(Name = "Modified By")]
         public string ModifiedBy { get; set; }
 
-        [ForeignKey("CR_Id")]    
-        public Car Cars { get; set; }
-
+        public Guid CR_Id { get; set; }
+        [ForeignKey("CR_Id")]   
+        public virtual Car Cars { get; set; }
         public ICollection<SubModel> subModels { get; set; }
         public ICollection<Images> Images { get; set; }
 

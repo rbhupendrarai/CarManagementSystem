@@ -4,14 +4,16 @@ using CarManagementSystem.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CarManagementSystemDbContext))]
-    partial class CarManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220218040830_crid")]
+    partial class crid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace CarManagementSystem.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<Guid>("MO_Id")
+                    b.Property<Guid?>("MO_Id1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModifiedBy")
@@ -59,7 +61,7 @@ namespace CarManagementSystem.Data.Migrations
 
                     b.HasKey("Img_Id");
 
-                    b.HasIndex("MO_Id");
+                    b.HasIndex("MO_Id1");
 
                     b.ToTable("Images");
                 });
@@ -164,7 +166,7 @@ namespace CarManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("DateTime");
 
-                    b.Property<Guid>("MO_Id")
+                    b.Property<Guid?>("MO_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModifiedBy")
@@ -396,13 +398,11 @@ namespace CarManagementSystem.Data.Migrations
 
             modelBuilder.Entity("CarManagementSystem.Data.Entities.Images", b =>
                 {
-                    b.HasOne("CarManagementSystem.Data.Models.Model", "Model")
+                    b.HasOne("CarManagementSystem.Data.Models.Model", "MO_Id")
                         .WithMany("Images")
-                        .HasForeignKey("MO_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MO_Id1");
 
-                    b.Navigation("Model");
+                    b.Navigation("MO_Id");
                 });
 
             modelBuilder.Entity("CarManagementSystem.Data.Models.Model", b =>
@@ -420,9 +420,7 @@ namespace CarManagementSystem.Data.Migrations
                 {
                     b.HasOne("CarManagementSystem.Data.Models.Model", "Models")
                         .WithMany("subModels")
-                        .HasForeignKey("MO_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MO_Id");
 
                     b.Navigation("Models");
                 });

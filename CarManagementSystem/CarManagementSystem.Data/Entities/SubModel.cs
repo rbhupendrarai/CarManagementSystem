@@ -61,10 +61,11 @@ namespace CarManagementSystem.Data.Models
         [Column(TypeName = "varchar")]
         [StringLength(30)]
         [Display(Name = "Modified By")]
-        public DateTime ModifiedBy { get; set; }
+        public string ModifiedBy { get; set; }
 
+        public Guid MO_Id { get; set; }
         [ForeignKey("MO_Id")]
-        public Model Models { get; set; }
+        public virtual Model Models { get; set; }
 
 
 

@@ -1,0 +1,97 @@
+﻿@model CarManagementSystem.Data.Models.Car
+@{
+    ViewData["Title"] = "CarDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <!-- Trigger the modal with a button -->
+            @*// <button type="button" class="btn btn-info " data-toggle="modal" data-target="#addCarModel">+ Add Car</button>*@
+            <a href="#" class="btn btn-info" onclick="AddNewCar(0)">Add New Car</a> <br />
+            <!-- Modal -->
+            <div class="modal" tabindex="-1" role="dialog" id="addCarModel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 id="ModalTitle"></h5>
+                            <h2>@ViewBag.Message</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="form">
+                                <fieldset id="SubmitForm">
+                                    <div asp-validation-summary="ModelOnly"  class="text-danger"></div>
+                                    <input type="hidden" asp-for="CR_Id" id="cid" />
+                                    <div class="form-group">
+                                        <label asp-for="CR_Name" class="control-label"></label>
+                                        <input asp-for="CR_Name" id="carname" class="form-control" />
+                                        <span asp-validation-for="CR_Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CR_Discription" class="control-label"></label>
+                                        <input asp-for="CR_Discription" id="discription" class="form-control" />
+                                        <span asp-validation-for="CR_Discription" class="text-danger"></span>
+                                    </div>
+                                   
+                                    <div class="form-group">
+                                        <a href="#" class="btn btn-block btn-danger" id="SaveCar">Save</a>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="col-md-12">
+            <table id="CarTable" class="table table-striped table-bordered dt-responsive nowrap" width="100%">
+               
+                <thead>
+                    <tr><th>
+                        </th>
+                        <th>
+                            <input type="search" placeholder="Search Name" id="txtCarName">
+                        </th>
+                        <th colspan="3">
+                            <input type="search" placeholder="Search Dispcription" id="txtDescription" />
+                        </th>
+                    
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>
+                            Car Name
+                        </th>
+                        <th>
+                            Discription
+                        </th>                     
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+
+
+                    </tr>
+                </thead>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+}

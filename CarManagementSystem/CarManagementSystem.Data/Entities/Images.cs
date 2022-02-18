@@ -50,7 +50,10 @@ namespace CarManagementSystem.Data.Entities
         [Display(Name = "Modified By")]
         public string ModifiedBy { get; set; }
 
-        public Model MO_Id{ get; set; }
+
+        public Guid MO_Id { get; set; }
+        [ForeignKey("MO_Id")]
+        public virtual Model Model{ get; set; }
 
 
     }

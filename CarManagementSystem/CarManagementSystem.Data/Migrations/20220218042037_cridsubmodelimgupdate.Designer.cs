@@ -4,14 +4,16 @@ using CarManagementSystem.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CarManagementSystemDbContext))]
-    partial class CarManagementSystemDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220218042037_cridsubmodelimgupdate")]
+    partial class cridsubmodelimgupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
