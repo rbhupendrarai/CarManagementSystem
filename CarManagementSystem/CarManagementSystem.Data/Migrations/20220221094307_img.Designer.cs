@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarManagementSystem.Data.Migrations
 {
     [DbContext(typeof(CarManagementSystemDbContext))]
-    [Migration("20220218040830_crid")]
-    partial class crid
+    [Migration("20220221094307_img")]
+    partial class img
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,44 @@ namespace CarManagementSystem.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-          
+            modelBuilder.Entity("CarManagementSystem.Data.Entities.Images", b =>
+                {
+                    b.Property<Guid>("Img_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .IsRequired()
+                        .HasColumnType("DateTime");
+
+                    b.Property<byte[]>("Img")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<Guid>("MO_Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ModifiedBy")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("DateTime");
+
+                    b.HasKey("Img_Id");
+
+                    b.HasIndex("MO_Id");
+
+                    b.ToTable("Images");
+                });
 
             modelBuilder.Entity("CarManagementSystem.Data.Models.Car", b =>
                 {
@@ -123,7 +160,7 @@ namespace CarManagementSystem.Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("DateTime");
 
-                    b.Property<Guid?>("MO_Id")
+                    b.Property<Guid>("MO_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModifiedBy")
@@ -353,7 +390,16 @@ namespace CarManagementSystem.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-           
+            modelBuilder.Entity("CarManagementSystem.Data.Entities.Images", b =>
+                {
+                    b.HasOne("CarManagementSystem.Data.Models.Model", "Model")
+                        .WithMany("Images")
+                        .HasForeignKey("MO_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Model");
+                });
 
             modelBuilder.Entity("CarManagementSystem.Data.Models.Model", b =>
                 {
@@ -370,7 +416,9 @@ namespace CarManagementSystem.Data.Migrations
                 {
                     b.HasOne("CarManagementSystem.Data.Models.Model", "Models")
                         .WithMany("subModels")
-                        .HasForeignKey("MO_Id");
+                        .HasForeignKey("MO_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Models");
                 });
@@ -433,7 +481,8 @@ namespace CarManagementSystem.Data.Migrations
 
             modelBuilder.Entity("CarManagementSystem.Data.Models.Model", b =>
                 {
-                   
+                    b.Navigation("Images");
+
                     b.Navigation("subModels");
                 });
 #pragma warning restore 612, 618

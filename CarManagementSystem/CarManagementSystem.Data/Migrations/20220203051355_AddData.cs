@@ -194,29 +194,8 @@ namespace CarManagementSystem.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Img_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Img_Name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
-                    Img = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "DateTime", nullable: false),
-                    CreatedBy = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "DateTime", maxLength: 30, nullable: false),
-                    ModifiedBy = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false),
-                    MO_Id1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Img_Id);
-                    table.ForeignKey(
-                        name: "FK_Images_Model_MO_Id1",
-                        column: x => x.MO_Id1,
-                        principalTable: "Model",
-                        principalColumn: "MO_Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
+         
+             
 
             migrationBuilder.CreateTable(
                 name: "SubModel",
@@ -283,10 +262,7 @@ namespace CarManagementSystem.Data.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_MO_Id1",
-                table: "Images",
-                column: "MO_Id1");
+  
 
             migrationBuilder.CreateIndex(
                 name: "IX_Model_CR_Id",
@@ -316,8 +292,7 @@ namespace CarManagementSystem.Data.Migrations
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
 
-            migrationBuilder.DropTable(
-                name: "Images");
+           
 
             migrationBuilder.DropTable(
                 name: "SubModel");

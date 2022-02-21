@@ -47,11 +47,10 @@ namespace CarManagementSystem.Web.Controllers
             var sortColumn = HttpContext.Request.Form["columns[" + HttpContext.Request.Form["order[0][column]"].FirstOrDefault() +
                                           "][name]"].FirstOrDefault();
             string sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
-
             var nameSearch = HttpContext.Request.Form["columns[0][search][value]"].FirstOrDefault();
             var subModelDiscription = HttpContext.Request.Form["columns[1][search][value]"].FirstOrDefault();
-            var subModelfeature = HttpContext.Request.Form["columns[2][search][value]"].FirstOrDefault();           
-            var modelName = HttpContext.Request.Form["columns[4][search][value]"].FirstOrDefault();
+            var subModelFeature = HttpContext.Request.Form["columns[2][search][value]"].FirstOrDefault();
+            var modelName = HttpContext.Request.Form["columns[3][search][value]"].FirstOrDefault();
 
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
@@ -78,17 +77,15 @@ namespace CarManagementSystem.Web.Controllers
             if (!string.IsNullOrEmpty(nameSearch))
             {
                 subModelsData = subModelsData.Where(m => m.SM_Name.Contains(nameSearch));
-
             }
             if (!string.IsNullOrEmpty(subModelDiscription))
             {
                 subModelsData = subModelsData.Where(m => m.SM_Discription.Contains(subModelDiscription));
-
-            }
-            if (!string.IsNullOrEmpty(subModelfeature))
+            }           
+            
+            if (!string.IsNullOrEmpty(subModelFeature))
             {
-                subModelsData = subModelsData.Where(m => m.SM_Feature.Contains(subModelfeature));
-
+                subModelsData = subModelsData.Where(m => m.SM_Feature.Contains(subModelFeature));
             }
            
             if (!string.IsNullOrEmpty(modelName))
@@ -123,8 +120,6 @@ namespace CarManagementSystem.Web.Controllers
                     {
                         ViewBag.Message = "Not Add";
                     }
-
-
                 }
                 else
                 {

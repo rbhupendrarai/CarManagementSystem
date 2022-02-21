@@ -19,7 +19,7 @@ namespace CarManagementSystem.Data.Data
         }
 
         public virtual DbSet<Car> Cars { get; set; }
-        public virtual DbSet<Images> Images { get; set; }
+        public virtual DbSet<Images> Image { get; set; }
         public virtual DbSet<Model> Models { get; set; }
         public virtual DbSet<SubModel> SubModels { get; set; }
         

@@ -16,17 +16,14 @@ namespace CarManagementSystem.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Img_Id { get; set; }
 
-        [Required]
-        [Column(TypeName = "varchar")]
-        [StringLength(30)]
-        [Display(Name = "Image Name")]
-        public string Img_Name { get; set; }
 
-        [Required]
-        [Column(TypeName = "varchar")]
-        [StringLength(100)]
-        [Display(Name = "Image")]
-        public string Img { get; set; }
+        [Required]   
+        [Display(Name = "Img")]
+        public byte[] Img { get; set; }
+
+       
+
+
         [Required]
         [Column(TypeName = "DateTime")]
         [Display(Name = "Created Date")]

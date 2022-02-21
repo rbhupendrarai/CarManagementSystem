@@ -34,15 +34,9 @@ namespace CarManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("DateTime");
 
-                    b.Property<string>("Img")
+                    b.Property<byte[]>("Img")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Img_Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<Guid>("MO_Id")
                         .HasColumnType("uniqueidentifier");

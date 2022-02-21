@@ -10,9 +10,9 @@
 
         <!-- Trigger the modal with a button -->
         @*// <button type="button" class="btn btn-info " data-toggle="modal" data-target="#addCarModel">+ Add Car</button>*@
-        <a href="#" class="btn btn-info" onclick="AddNewModel(0)">Add New</a> <br />
+        <a href="#" class="btn btn-info" onclick="AddNewSubModel(0)">Add New</a> <br />
         <!-- Modal -->
-        <div class="modal" tabindex="-1" role="dialog" id="addModel">
+        <div class="modal" tabindex="-1" role="dialog" id="addSubModel">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -26,7 +26,8 @@
                         <form id="form">
                             <fieldset id="SubmitForm">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="SM_Id" id="smid" />
+                                <input type="hidden" asp-for="SM_Id" id="smId" />
+
                                 <div class="form-group">
                                     <label asp-for="SM_Name" class="control-label"></label>
                                     <input asp-for="SM_Name" id="smName" class="form-control" />
@@ -49,13 +50,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label asp-for="MO_Id" class="control-label">Model</label>
-                                    <select asp-for="MO_Id" id="mid" class="form-control" asp-items="@(new SelectList(ViewBag.modelList,"MO_Id","MO_Name"))">
-                                        <option value="0">Please select Model</option>
+                                    <label asp-for="MO_Id"  id="mname" class="control-label">Model</label>
+                                    <select asp-for="MO_Id" class="form-control" asp-items="@(new SelectList(ViewBag.modelList,"MO_Id","MO_Name"))">
+                                        <option value="0">Please select Sub Model</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <input type="submit" value="Create" class="btn btn-primary" />
+                                    <input type="submit" id="SaveSubModel" value="Save" class="btn btn-primary" />
                                 </div>
                             </fieldset>
                         </form>
@@ -72,7 +73,7 @@
 
             <thead>
                 <tr>
-                    
+                    <th></th>
                     <th>
                         <input type="search" placeholder="Search Name" id="txtsmName">
                     </th>
@@ -82,17 +83,14 @@
                     <th>
                         <input type="search" placeholder="Search Feature" id="txtsmFeature">
                     </th>
-                    <th>
-                        <input type="search" placeholder="Search Car" id="txtsmprice">
-                    </th>
-
-                    <th colspan="3">
-                        <input type="search" placeholder="Search Car" id="txtmodel">
+                 
+                    <th colspan="4">
+                        <input type="search" placeholder="Search Model" id="txtModel">
                     </th>
 
                 </tr>
                 <tr>
-                    
+                    <th></th>
                     <th>
                         SubModel Name
                     </th>
@@ -103,11 +101,12 @@
                         Feature
                     </th>
                     <th>
-                        Price
-                    </th>
-                    <th>
                         Model
                     </th>
+                    <th>
+                        Price
+                    </th>
+
                     <th>
                         Edit
                     </th>

@@ -39,7 +39,7 @@ $(document).ready(function () {
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return "<a href='#' class='btn btn-danger' onclick=ConfirmDelete('" + row.MO_Id + "');>Delete</a>";
+                        return "<a href='#' class='btn btn-danger' onclick=DeleteModel('" + row.MO_Id + "');>Delete</a>";
                     }
                 },
             ]
@@ -65,65 +65,64 @@ $(document).ready(function () {
     });
 
 });
-function ConfirmDelete(MO_Id) {
+   
+
+function DeleteModel(MO_Id) {
     if (confirm("Are you sure you want to delete ...?")) {
-        Delete(MO_Id);
-    } else {
+        var url = 'RemoveModel';
+        $.post(url, { ID: MO_Id }, function (data) {
+            if (data) {
+                oTable = $('#ModelTable').DataTable();
+                oTable.draw();
+            } else {
+                alert("Something Went Wrong!");
+            }
+        });
+    }
+    else {
         return false;
     }
 };
+    function AddNewModel() {
+        $("#form")[0].reset();
+        $("#MO_Id").val(0);
+        $("#ModalTitle").html("Add New Model");
+        $("#addModel").modal();
 
-function Delete(MO_Id) {
-    var url = '/Model/RemoveModel';
-    $.post(url, { ID: MO_Id }, function (data) {
-        if (data) {
-            oTable = $('#ModelTable').DataTable();
-            oTable.draw();
-        } else {
-            alert("Something Went Wrong!");
-        }
+    }
+    function UpdateModel(MO_Id) {
+        var url = "/Model/GetModelId?ID=" + MO_Id;
+
+        $("#ModalTitle").html("Update Model");
+        $("#addModel").modal();
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                var obj = JSON.parse(data);
+                $("#mid").val(obj.MO_Id);
+                $("#mname").val(obj.MO_Name);
+                $("#mdiscription").val(obj.MO_Discription);
+                $("#mfeature").val(obj.MO_Feature);
+                $("#cname").val(obj.CR_Name);
+
+
+            }
+        });
+    }
+    $("#SaveModel").click(function () {
+        var data = $("#SubmitForm").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Model/AddOrEditModel",
+            data: data,
+            success: function (otput) {
+                alert("Added Successfully");
+                window.location.href = "/Model/ModelDetail";
+                $("#addModel").modal("hide");
+
+            }
+        });
+
     });
-};
-function AddNewModel() {
-    $("#form")[0].reset();
-    $("#MO_Id").val(0);
-    $("#ModalTitle").html("Add New Model");
-    $("#addModel").modal();
 
-}
-function UpdateModel(MO_Id) {
-    var url = "/Model/GetModelId?ID=" + MO_Id;
-
-    $("#ModalTitle").html("Update Model");
-    $("#addModel").modal();
-    $.ajax({
-        type: "GET",
-        url: url,
-        success: function (data) {
-            var obj = JSON.parse(data);
-
-            $("#mid").val(obj.MO_Id);
-            $("#mname").val(obj.MO_Name);
-            $("#mdiscription").val(obj.MO_Discription);
-            $("#mfeature").val(obj.MO_Feature);
-            $("#cname").val(obj.CR_Name);
-
-
-        }
-    });
-}
-$("#SaveModel").click(function () {
-    var data = $("#SubmitForm").serialize();
-    $.ajax({
-        type: "Post",
-        url: "/Model/AddOrEditModel",
-        data: data,
-        success: function (otput) {
-            alert("Added Successfully");
-            window.location.href = "/Model/ModelDetail";
-            $("#addModel").modal("hide");
-
-        }
-    })
-
-})

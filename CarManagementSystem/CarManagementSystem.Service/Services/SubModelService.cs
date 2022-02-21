@@ -66,7 +66,7 @@ namespace CarManagementSystem.Service.Services
         {
             try
             {
-                var result = await _context.SubModels.SingleOrDefaultAsync(x => x.SM_Id == subModel.SM_Id);
+                var result =  _context.SubModels.SingleOrDefault(s => s.SM_Id == subModel.SM_Id);
                 if (result != null)
                 {
                     result.SM_Name = subModel.SM_Name;

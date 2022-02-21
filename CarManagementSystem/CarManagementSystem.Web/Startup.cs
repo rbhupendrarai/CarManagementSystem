@@ -33,6 +33,7 @@ namespace CarManagementSystem.Web
            services.AddTransient<CarService>();
             services.AddTransient<ModelService>();
             services.AddTransient<SubModelService>();
+            services.AddTransient<ImageService>();
             services.AddScoped<IUserService, UserService>();
            //services.AddDistributedMemoryCache();
            //services.AddSession();

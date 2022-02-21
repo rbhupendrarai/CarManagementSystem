@@ -159,7 +159,7 @@ namespace CarManagementSystem.Web.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetModelId(Guid id)
+        public async Task<IActionResult> GetModelId(Guid id)
         {
             Model model = _modelService.GetModelByID(id);
             string value = string.Empty;
@@ -172,7 +172,7 @@ namespace CarManagementSystem.Web.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult RemoveModel(Guid id)
+        public async Task<IActionResult> RemoveModel(Guid id)
         {
             try
             {
