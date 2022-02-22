@@ -4,6 +4,7 @@ using CarManagementSystem.Service.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -12,27 +13,33 @@ namespace CarManagementSystem.Service.Services
    
     public class AccountService
     {
-        private readonly IHttpContextAccessor _httpContext;
+     
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUserService _userService;//get current loged user
-        private readonly CarManagementSystemDbContext _context;
-        //private readonly ISession _session;
+      
 
 
 
 
-        public AccountService(IHttpContextAccessor httpContext, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,IUserService userService,CarManagementSystemDbContext systemDbContext)
+        public AccountService( UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userService = userService;
            // _session = session;
-            _context = systemDbContext;
-            _httpContext = httpContext;
+            
 
         }
-        
+
+        public async Task<bool> GetUsers()
+        {
+           var user=  await _userManager.GetUsersInRoleAsync("User");
+            return true;
+
+        }
+           
+       
         public async Task<bool> CreateUser(RegisterVModel registerVModel)
         {
             try
@@ -144,7 +151,7 @@ namespace CarManagementSystem.Service.Services
             return true;
 
         }
-
+       
         public async Task<bool> Logout()
         {
             await _signInManager.SignOutAsync();
