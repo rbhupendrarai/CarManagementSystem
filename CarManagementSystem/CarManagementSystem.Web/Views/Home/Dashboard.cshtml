@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.IsInRole("User"))
+{
+    @ViewBag.userId 
+
+    <div class="row">
+       
+
+
+        <div class="col-md-12">
+            <table id="HomeTable" class="table table-striped table-bordered dt-responsive nowrap" width="100%">
+
+                <thead>
+                    <tr>
+                        <th>
+                        </th>
+                        <th>
+                            <input type="search" placeholder="Search Name" id="txtcarName">
+                        </th>
+                        <th>
+                            <input type="search" placeholder="Search Model" id="txtmoName">
+                        </th>
+                        <th>
+                            <input type="search" placeholder="Search Sub Model" id="txtsmName">
+                        </th>
+
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>
+                            Car Name
+                        </th>
+                        <th>
+                            Model Name
+                        </th>
+                        <th>
+                            Sub Model Name
+                        </th>
+
+                    </tr>
+                </thead>
+
+            </table>
+
+        </div>
+
+    </div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
+}
+

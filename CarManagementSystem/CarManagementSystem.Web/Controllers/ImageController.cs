@@ -1,9 +1,7 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using CarManagementSystem.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using CarManagementSystem.Data.Entities;
 using CarManagementSystem.Data.Data;
 using System.IO;
 using System;
@@ -11,25 +9,27 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
-
+using CarManagementSystem.Data.Models;
 namespace CarManagementSystem.Web.Controllers
 {
     public class ImageController : Controller
     {
         private readonly CarManagementSystemDbContext _context;
         private readonly ImageService _imageService;
+        private readonly SubModelService _subModelService;
 
-        public ImageController(CarManagementSystemDbContext context, ImageService imageService)
+        public ImageController(SubModelService subModelService,CarManagementSystemDbContext context, ImageService imageService)
         {
             _imageService = imageService;
             _context = context;
+            _subModelService = subModelService;
         }
 
 
         [HttpGet]
         public IActionResult ImageDetail()
         {
-            var list = _imageService.GetModel();
+            var list = _subModelService.GetModelList();
             ViewBag.moList = list;
             return View();
 

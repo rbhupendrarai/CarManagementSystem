@@ -1,15 +1,12 @@
 ﻿using CarManagementSystem.Data.Data;
-using CarManagementSystem.Data.Entities;
 using CarManagementSystem.Data.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using System.Data.Entity;
-using System.Linq.Dynamic.Core;
+
 namespace CarManagementSystem.Service.Services
 {
     public class ImageService
@@ -20,16 +17,7 @@ namespace CarManagementSystem.Service.Services
 
             _context = carManagementSystemDbContext;
         }
-        public List<Model> GetModel()
-        {
-            return _context.Models
-           .Select(model => new Model()
-           {
-               MO_Id = model.MO_Id,
-               MO_Name = model.MO_Name
-
-           }).ToList();
-        }
+  
         public async Task<bool> AddImage(Images img, IFormFile[] fileupload)
         {
             try

@@ -34,7 +34,7 @@ namespace CarManagementSystem.Web.Controllers
 
         [HttpPost]
         [Authorize (Roles ="Admin")]
-        public IActionResult GetUserDetail()
+        public async Task<IActionResult> GetUserDetail()
         {
 
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
@@ -53,7 +53,9 @@ namespace CarManagementSystem.Web.Controllers
 
 
 
-            var userData = (from user in _userManager.Users select user);                      
+            var userData = (from user in _userManager.Users select user);
+
+         // var role=  await _userManager.GetRolesAsync(userData.());
                                  
 
 
@@ -81,14 +83,12 @@ namespace CarManagementSystem.Web.Controllers
         }
 
 
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult AddUser()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> AddUser(RegisterVModel registerVModel)
         {
@@ -125,7 +125,7 @@ namespace CarManagementSystem.Web.Controllers
             {
                
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Dashboard", "Home");
             }
             else
             {
@@ -136,33 +136,32 @@ namespace CarManagementSystem.Web.Controllers
             return View(loginVModel);
         }
 
-       
 
-        [AllowAnonymous]
-        [HttpGet]
+       [HttpGet]
+     
         public IActionResult ChangePassword()
         {
             return View();
         }
 
-        [AllowAnonymous]
-        [HttpPost]
-        public async Task<IActionResult> ChangePassowrd(ChangePasswordVModel changePasswordVModel)
+       
+      [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVModel changePasswordVModel)
         {
             if (ModelState.IsValid)
             {
-                await _accountService.ChangePassword(changePasswordVModel);
+               var result= await _accountService.ChangePassword(changePasswordVModel);
 
-                //if (result == 0)
-                //{
-                //    ViewBag.Message = "Password Update Succesfully";
-                //    return RedirectToAction("Index", "Home");
-                //}
-                //else
-                //{
-                //    ViewBag.Message = "Ivalid Login Attampt";
-                //}
-                return View(changePasswordVModel);
+                if (result == true)
+                {
+                    ViewBag.Message = "Password Update Succesfully";
+                  
+                }
+                else
+                {
+                    ViewBag.Message = "Old Password Doesn't Match";
+                }
+              
             }
             return View(changePasswordVModel);
         }

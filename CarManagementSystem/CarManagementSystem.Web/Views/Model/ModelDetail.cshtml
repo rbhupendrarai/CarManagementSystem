@@ -35,7 +35,7 @@
                                     <div class="form-group">
                                         <label asp-for="MO_Name" class="control-label"></label>
                                         <input asp-for="MO_Name" id="mname" class="form-control" />
-                                        <span asp-validation-for="MO_Name"  class="text-danger"></span>
+                                        <span asp-validation-for="MO_Name" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="MO_Discription" class="control-label"></label>
@@ -50,7 +50,7 @@
 
                                     <div class="form-group">
                                         <label asp-for="CR_Id" id="cname" class="control-label">Car Name</label>
-                                        <select asp-for="CR_Id"  asp-items="@(new SelectList(ViewBag.carList,"CR_Id","CR_Name"))" class="form-control">
+                                        <select asp-for="CR_Id" asp-items="@(new SelectList(ViewBag.carList,"CR_Id","CR_Name"))" class="form-control">
                                             <option value="0">Please select Car</option>
                                         </select>
 
@@ -82,7 +82,7 @@
                             <th>
                                 <input type="search" placeholder="Search Dispcription" id="txtModelDescription" />
                             </th>
-                            <th >
+                            <th>
                                 <input type="search" placeholder="Search Feature" id="txtModelFeature">
                             </th>
                             <th colspan="3">
@@ -122,4 +122,8 @@
         </div>
 
     </div>
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
 }

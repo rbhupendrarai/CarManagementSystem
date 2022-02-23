@@ -112,6 +112,7 @@ function UpdateSubModel(SM_Id) {
 }
 
 $("#SaveSubModel").click(function () {
+    
     var data = $("#SubmitForm").serialize();
     $.ajax({
         type: "Post",

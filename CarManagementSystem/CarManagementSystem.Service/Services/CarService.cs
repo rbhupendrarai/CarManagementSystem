@@ -2,27 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using CarManagementSystem.Data.Data;
 using CarManagementSystem.Data.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
 namespace CarManagementSystem.Service.Services
 {
     public class CarService
     {
-
         private readonly CarManagementSystemDbContext _context;
         public CarService(CarManagementSystemDbContext carManagementSystemDbContext)
         {
-
             _context = carManagementSystemDbContext;
         }
         public List<Car> GetCarDetail()
-        {
-            
-
+        {   
             return _context.Cars
             .Select(car => new Car()
             {
@@ -49,8 +42,7 @@ namespace CarManagementSystem.Service.Services
                 Console.WriteLine(ex.Message);
                 return false;
             }           
-        }
-       
+        }       
         public async Task<bool> EditCar(Car cars)
         {
             try
@@ -63,13 +55,12 @@ namespace CarManagementSystem.Service.Services
                     result.ModifiedBy = "Admin";
                     result.ModifiedDate = DateTime.Now;
                    await _context.SaveChangesAsync();
-
                 }
-                else {
+                else
+                {
                     return false;
                 }
                 return true;
-
             }
             catch (Exception ex)
             {

@@ -10,45 +10,36 @@ using System.Web.Mvc;
 
 namespace CarManagementSystem.Service.Services
 {
-   
+
     public class AccountService
     {
-     
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUserService _userService;//get current loged user
-      
-
-
-
-
-        public AccountService( UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager,IUserService userService)
+        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userService = userService;
-           // _session = session;
-            
+            // _session = session;
+
 
         }
 
         public async Task<bool> GetUsers()
         {
-           var user=  await _userManager.GetUsersInRoleAsync("User");
+            var user = await _userManager.GetUsersInRoleAsync("User");
             return true;
-
         }
-           
-       
+
         public async Task<bool> CreateUser(RegisterVModel registerVModel)
         {
             try
             {
-
                 var user = new IdentityUser
                 {
                     UserName = registerVModel.UserName,
-                    Email = registerVModel.Email,                     
+                    Email = registerVModel.Email,
                 };
 
                 var emailExist = await _userManager.FindByEmailAsync(user.Email);
@@ -57,20 +48,17 @@ namespace CarManagementSystem.Service.Services
                     return false;
                 }
                 var result = await _userManager.CreateAsync(user, registerVModel.Password);
-              
 
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user,"user");
-                //  await _signInManager.SignInAsync(user, isPersistent: true);
-                  
-                }
-              
+                    await _userManager.AddToRoleAsync(user, "user");
+                    //  await _signInManager.SignInAsync(user, isPersistent: true);
 
+                }
                 foreach (var error in result.Errors)
                 {
-                  // _session.SetString("Error",error.Description);
-                     ModelState.Equals("Error", error.Description);                    
+                    // _session.SetString("Error",error.Description);
+                    ModelState.Equals("Error", error.Description);
                     return false;
                 }
 
@@ -80,25 +68,23 @@ namespace CarManagementSystem.Service.Services
             {
 
                 ModelState.Equals(ex.Message, "Invalid Login Attempt");
-         
+
                 return false;
             }
 
-            
         }
-     
         public async Task<bool> ChangePassword(ChangePasswordVModel model)
         {
             var userId = _userService.GetUserId();
             var user = await _userManager.FindByIdAsync(userId);
-            var result= await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
 
             if (result.Succeeded)
             {
                 return true;
             }
-            else 
-            { 
+            else
+            {
                 return false;
             }
 
@@ -112,7 +98,7 @@ namespace CarManagementSystem.Service.Services
         //        var result = await _userManager.ChangePasswordAsync(user, changePasswordVModel.OldPassword, changePasswordVModel.NewPassword);
         //        if (result.Succeeded)
         //        {                 
-             
+
         //            return 0;
         //        }
         //        foreach (var error in result.Errors)
@@ -126,7 +112,7 @@ namespace CarManagementSystem.Service.Services
         //    }
         //    return 0;
         //}
-       
+
         public async Task<bool> LoginUser(LoginVModel loginVModel)
         {
             try
@@ -135,31 +121,25 @@ namespace CarManagementSystem.Service.Services
 
                 if (result.Succeeded)
                 {
-                   
+
                     return true;
                 }
                 else
-                {                   
-                   
+                {
                     return false;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);               
+                Console.WriteLine(ex.Message);
             }
             return true;
-
         }
-       
         public async Task<bool> Logout()
         {
             await _signInManager.SignOutAsync();
             //await _httpContext.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-          
             return true;
         }
-      
     }
 }

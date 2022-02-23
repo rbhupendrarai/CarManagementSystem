@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CarManagementSystem.Data.Entities
+namespace CarManagementSystem.Data.Models
 {
     [Table("Images")]
     public class Images

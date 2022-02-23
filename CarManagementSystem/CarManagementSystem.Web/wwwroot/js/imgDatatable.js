@@ -107,6 +107,7 @@ $("#SaveImage").click(function () {
         data: data,
         processData: false,
         contentType: false,
+        cache: false,
         success: function (otput) {
             alert("Added Successfully");
             window.location.href = "/Image/ImageDetail";

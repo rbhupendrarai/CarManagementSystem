@@ -1,4 +1,4 @@
-﻿using CarManagementSystem.Data.Entities;
+﻿
 using CarManagementSystem.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

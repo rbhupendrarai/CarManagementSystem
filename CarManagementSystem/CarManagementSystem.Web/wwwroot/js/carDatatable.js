@@ -15,19 +15,22 @@ $(document).ready(function () {
                 "datatype": "json"
             },
             "columnDefs":
-                [{
-                    targets: [3],                    
-                    orderable: false
-                },
-                {
-                   targets: [4],
-                   orderable: false
-                },],
+                [
+                    {
+                        targets: [3],
+                        orderable: false
+                    },
+                    {
+                        targets: [4],
+                        orderable: false
+                    },
+                   
+                ],
             "columns": [
                 { "data": "CR_Id", "name": "CR_Id", "visible": false },
                 { "data": "CR_Name", "name": "CR_Name"},
                 { "data": "CR_Discription", "name": "CR_Discription" },
-        
+              
                 {
                     data: null,
                     render: function (data, type,row) {
@@ -101,6 +104,7 @@ function UpdateCar(CR_Id) {
     });
 }
 $("#SaveCar").click(function () {
+    
     var data = $("#SubmitForm").serialize();
     $.ajax({
         type: "Post",
