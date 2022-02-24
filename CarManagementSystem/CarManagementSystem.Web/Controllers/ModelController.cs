@@ -41,9 +41,9 @@ namespace CarManagementSystem.Web.Controllers
 
 
         [HttpPost]
-     
+
         [Authorize(Roles = "Admin")]
-        public IActionResult GetModelDetail()
+        public async Task<IActionResult> GetModelDetail()
         {
 
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
@@ -58,54 +58,30 @@ namespace CarManagementSystem.Web.Controllers
 
             //searching
             var nameSearch = HttpContext.Request.Form["columns[0][search][value]"].FirstOrDefault();
-            var discriptionSearch = HttpContext.Request.Form["columns[1][search][value]"].FirstOrDefault();
-            var featureSearch = HttpContext.Request.Form["columns[3][search][value]"].FirstOrDefault();
-            var carname = HttpContext.Request.Form["columns[4][search][value]"].FirstOrDefault();
+
 
 
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
 
-
-            var modelData = from m in _context.Models // outer sequence
-                            join c in _context.Cars //inner sequence 
-                            on m.CR_Id equals c.CR_Id // key selector 
-                            select new
-                            { // result selector 
-                                MO_Id=m.MO_Id,
-                                MO_Name = m.MO_Name,
-                                MO_Discription = m.MO_Discription,
-                                MO_Feature = m.MO_Feature,
-                                CR_Name = c.CR_Name
-                            };
-            // var carData = _carService.GetCarDetail();
+            var modelData = await _modelService.GetModel();
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             {
-               modelData = modelData.OrderBy(sortColumn + " " + sortColumnDirection);
+                modelData = modelData.OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
             if (!string.IsNullOrEmpty(nameSearch))
             {
-                modelData = modelData.Where(m => m.MO_Name.Contains(nameSearch));
+                modelData = modelData.Where(m => m.MO_Name.Contains(nameSearch)
+                                            || m.MO_Discription.Contains(nameSearch)
+                                           ||  m.MO_Feature.Contains(nameSearch)
+                                           || m.CR_Name.Contains(nameSearch)
+                );
 
             }
-            if (!string.IsNullOrEmpty(discriptionSearch))
-            {
-                modelData = modelData.Where(m => m.MO_Discription.Contains(discriptionSearch));
-
-            }
-            if (!string.IsNullOrEmpty(featureSearch))
-            {
-                modelData = modelData.Where(m => m.MO_Feature.Contains(featureSearch));
-
-            }
-            if (!string.IsNullOrEmpty(carname))
-            {
-                modelData = modelData.Where(m => m.CR_Name.Contains(carname));
-
-            }
+        
             recordsTotal = modelData.Count();
             var data = modelData.Skip(skip).Take(pageSize).ToList();
 

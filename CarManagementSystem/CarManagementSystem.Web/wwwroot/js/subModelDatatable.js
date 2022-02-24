@@ -48,24 +48,12 @@
 
         });
     $("#txtsmName").keyup(function () {
-        datatable.column(0).search($(this).val().toLowerCase(), 'SM_Name');
-        datatable.draw();
-
-    });
-    $("#txtsmDescription").keyup(function () {
-        datatable.column(1).search($(this).val().toLowerCase(), 'SM_Description');
-        datatable.draw();
-    });
-    $("#txtsmFeature").keyup(function () {
-        datatable.column(2).search($(this).val().toLowerCase(), 'SM_Feature');
+        datatable.column(0).search($(this).val().toLowerCase());
         datatable.draw();
 
     });
  
-    $("#txtModel").keyup(function () {
-        datatable.column(3).search($(this).val().toLowerCase(), 'MO_Name');
-        datatable.draw();
-    });
+ 
 });
 
 

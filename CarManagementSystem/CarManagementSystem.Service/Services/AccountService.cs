@@ -1,10 +1,12 @@
 ﻿using CarManagementSystem.Data.Data;
+
 using CarManagementSystem.Data.ViewModel;
 using CarManagementSystem.Service.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -15,22 +17,33 @@ namespace CarManagementSystem.Service.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+
         private readonly IUserService _userService;//get current loged user
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
+        private readonly CarManagementSystemDbContext _context;
+        public AccountService(CarManagementSystemDbContext context,UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userService = userService;
-            // _session = session;
-
-
+            _userService = userService;          
+            _context=context;
         }
-
-        public async Task<bool> GetUsers()
+        public async Task<IQueryable> GetUsers()
         {
-            var user = await _userManager.GetUsersInRoleAsync("User");
-            return true;
-        }
+
+            return from user in _context.Users
+                   join userRole in _context.UserRoles
+                   on user.Id equals userRole.UserId
+                   join role in _context.Roles
+                   on userRole.RoleId equals role.Id
+                   select new { 
+                         Id=user.Id,
+                         LockDate=user.LockoutEnd,
+                         UserName=user.UserName,
+                         Email=user.Email,
+                         Role=role.Name     
+                   
+                   };
+        }        
 
         public async Task<bool> CreateUser(RegisterVModel registerVModel)
         {
@@ -89,30 +102,7 @@ namespace CarManagementSystem.Service.Services
             }
 
         }
-        //public async Task<int> ChangePassword(ChangePasswordVModel changePasswordVModel)
-        //{
-        //    try
-        //    {
-        //        var userId = _userService.GetUserId();
-        //        var user = await _userManager.FindByIdAsync(userId);
-        //        var result = await _userManager.ChangePasswordAsync(user, changePasswordVModel.OldPassword, changePasswordVModel.NewPassword);
-        //        if (result.Succeeded)
-        //        {                 
-
-        //            return 0;
-        //        }
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.Equals("", error.Description);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ModelState.Equals(ex.Message, "Not Change");
-        //    }
-        //    return 0;
-        //}
-
+       
         public async Task<bool> LoginUser(LoginVModel loginVModel)
         {
             try
@@ -135,6 +125,37 @@ namespace CarManagementSystem.Service.Services
             }
             return true;
         }
+
+        
+         public async Task<bool> GetUserByID(string id)
+         {
+            var result= _context.Users.Find(id);
+            var cntResult= result.Id.Count();
+            var GetActiveStatus= _context.Users.Where(lockDate => lockDate.LockoutEnd != null && lockDate.Id.Contains(id));//Alerdy Deactive try to Active
+            var cntActiveStatus = GetActiveStatus.Count();
+            var GetDeactiveStatus = _context.Users.Where(lockDate => lockDate.LockoutEnd == null && lockDate.Id.Contains(id));//Alerdy Active try to DeActive
+            var cntDeactiveStatus = GetDeactiveStatus.Count();
+            if (cntResult > 0)
+            {
+                if (cntActiveStatus > 0)
+                {
+                    result.LockoutEnd= DateTime.Now;                 
+                    await _context.SaveChangesAsync();
+                }
+                if (cntDeactiveStatus > 0)
+                {
+                    result.LockoutEnd = DateTime.Today.AddDays(12);
+                    await _context.SaveChangesAsync();
+                }
+
+
+            }
+            return true;
+
+
+        }
+    
+
         public async Task<bool> Logout()
         {
             await _signInManager.SignOutAsync();

@@ -15,17 +15,12 @@ namespace CarManagementSystem.Web.Controllers
 {
  
     public class SubModelController : Controller
-    {
-       
-        private readonly SubModelService _subModelService;
-        private readonly CarManagementSystemDbContext _context;
-       
-        public SubModelController(SubModelService subModelService, CarManagementSystemDbContext context)
+    {       
+        private readonly SubModelService _subModelService;       
+        public SubModelController(SubModelService subModelService)
         {
-            _subModelService = subModelService;
-            _context = context;
+            _subModelService = subModelService;           
         }
-
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult SubModelDetail()
@@ -33,14 +28,12 @@ namespace CarManagementSystem.Web.Controllers
             var list = _subModelService.GetModelList();
             ViewBag.modelList = list;
             return View();
-
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetSubModelDetail()
+        public async Task<IActionResult> GetSubModelDetail()
         { 
-
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
             var start = HttpContext.Request.Form["start"].FirstOrDefault();
             var length = HttpContext.Request.Form["length"].FirstOrDefault();
@@ -48,27 +41,15 @@ namespace CarManagementSystem.Web.Controllers
                                           "][name]"].FirstOrDefault();
             string sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
             var nameSearch = HttpContext.Request.Form["columns[0][search][value]"].FirstOrDefault();
-            var subModelDiscription = HttpContext.Request.Form["columns[1][search][value]"].FirstOrDefault();
-            var subModelFeature = HttpContext.Request.Form["columns[2][search][value]"].FirstOrDefault();
-            var modelName = HttpContext.Request.Form["columns[3][search][value]"].FirstOrDefault();
 
-
+            //var subModelDiscription = HttpContext.Request.Form["columns[1][search][value]"].FirstOrDefault();
+       
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
 
-            var subModelsData = from m in _context.SubModels // outer sequence
-                                join c in _context.Models //inner sequence 
-                                on m.MO_Id equals c.MO_Id // key selector 
-                                select new
-                                { // result selector 
-                                    SM_Id = m.SM_Id,
-                                    SM_Name = m.SM_Name,
-                                    SM_Discription = m.SM_Discription,
-                                    SM_Feature = m.SM_Feature,
-                                    SM_Price = m.SM_Price,
-                                    MO_Name = c.MO_Name
-                                };
+            var subModelsData = await _subModelService.GetSubModel(); //Data Table Source
+
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             {
                 subModelsData = subModelsData.OrderBy(sortColumn + " " + sortColumnDirection);
@@ -76,23 +57,14 @@ namespace CarManagementSystem.Web.Controllers
 
             if (!string.IsNullOrEmpty(nameSearch))
             {
-                subModelsData = subModelsData.Where(m => m.SM_Name.Contains(nameSearch));
+                subModelsData = subModelsData.Where(m => m.SM_Name.Contains(nameSearch)
+                                                       || m.SM_Discription.Contains(nameSearch)
+                                                        || m.SM_Feature.Contains(nameSearch)
+                                                        || m.MO_Name.Contains(nameSearch)
+                );
             }
-            if (!string.IsNullOrEmpty(subModelDiscription))
-            {
-                subModelsData = subModelsData.Where(m => m.SM_Discription.Contains(subModelDiscription));
-            }           
-            
-            if (!string.IsNullOrEmpty(subModelFeature))
-            {
-                subModelsData = subModelsData.Where(m => m.SM_Feature.Contains(subModelFeature));
-            }
-           
-            if (!string.IsNullOrEmpty(modelName))
-            {
-                subModelsData = subModelsData.Where(m => m.MO_Name.Contains(modelName));
-
-            }
+  
+       
             recordsTotal = subModelsData.Count();
             var data = subModelsData.Skip(skip).Take(pageSize).ToList();
 

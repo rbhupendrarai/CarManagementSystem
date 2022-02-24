@@ -1,4 +1,5 @@
 ﻿using CarManagementSystem.Data.Data;
+using CarManagementSystem.Data.DTO;
 using CarManagementSystem.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -29,20 +30,20 @@ namespace CarManagementSystem.Service.Services
 
 
         }
-        public List<SubModel> GetSubModelDetail()
+        public async Task<IQueryable<CarModelSubModelDTO>> GetSubModel()
         {
-
-            return _context.SubModels
-            .Select(model => new SubModel()
-            {
-                SM_Id = model.SM_Id,
-                SM_Name = model.SM_Name,
-                SM_Discription = model.SM_Discription,
-                SM_Feature = model.SM_Feature,
-                SM_Price = model.SM_Price,
-                MO_Id = model.MO_Id
-
-            }).ToList();
+            return from m in _context.SubModels // outer sequence
+                   join c in _context.Models //inner sequence 
+                   on m.MO_Id equals c.MO_Id // key selector 
+                   select new CarModelSubModelDTO()
+                   { // result selector 
+                       SM_Id = m.SM_Id,
+                       SM_Name = m.SM_Name,
+                       SM_Discription = m.SM_Discription,
+                       SM_Feature = m.SM_Feature,
+                       SM_Price = m.SM_Price,
+                       MO_Name = c.MO_Name
+                   };         
         }
         public async Task<bool> AddSubmodel(SubModel subModel)
         {

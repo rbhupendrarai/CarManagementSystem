@@ -22,8 +22,7 @@ namespace CarManagementSystem.Web.Controllers
         public AccountController( RoleManager<IdentityRole> rolManager, UserManager<IdentityUser> userManager,AccountService carService)
         {
             _accountService = carService;
-            _userManager=userManager;
-          
+            _userManager=userManager;          
             _rolManager = rolManager;
         }
         public IActionResult UserDetail()
@@ -40,7 +39,6 @@ namespace CarManagementSystem.Web.Controllers
             var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
             var start = HttpContext.Request.Form["start"].FirstOrDefault();
             var length = HttpContext.Request.Form["length"].FirstOrDefault();
-
             var sortColumn = HttpContext.Request.Form["columns[" + HttpContext.Request.Form["order[0][column]"].FirstOrDefault() +
                                          "][name]"].FirstOrDefault();
             string sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
@@ -49,34 +47,28 @@ namespace CarManagementSystem.Web.Controllers
             int pageSize = length != null ? Convert.ToInt32(length) : 0;
             int skip = start != null ? Convert.ToInt32(start) : 0;
             int recordsTotal = 0;
-
-
-
-
-            var userData = (from user in _userManager.Users select user);
-
-         // var role=  await _userManager.GetRolesAsync(userData.());
-                                 
-
+    
+            var userData =  await _accountService.GetUsers();
+            //var role = await _userManager.GetRolesAsync(userData.FirstOrDefault());
 
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             {
                 userData = userData.OrderBy(sortColumn + " " + sortColumnDirection);
             }
 
-            if (!string.IsNullOrEmpty(nameSearch))
-            {
-                userData = userData.Where(m => m.UserName.Contains(nameSearch));
+            //if (!string.IsNullOrEmpty(nameSearch))
+            //{
+            //    userData = userData.Where(m => m..Contains(nameSearch));
 
-            }
-            if (!string.IsNullOrEmpty(emailSearch))
-            {
-                userData = userData.Where(m => m.Email.Contains(emailSearch));
+            //}
+            //if (!string.IsNullOrEmpty(emailSearch))
+            //{
+            //    userData = userData.Where(m => m.Email.Contains(emailSearch));
 
-            }
+            //}
 
             recordsTotal = userData.Count();
-            var data = userData.Skip(skip).Take(pageSize).ToList();
+            var data = userData.Skip(skip);
 
             var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
             return Ok(JsonConvert.SerializeObject(jsonData));
@@ -167,12 +159,29 @@ namespace CarManagementSystem.Web.Controllers
         }
 
       
-        [Authorize]
+        [Authorize (Roles ="Admin,User")]
         public async Task<IActionResult> Logout()
         {
             await _accountService.Logout();
 
             return RedirectToAction("Login");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActiveDeactiveUser(string id)
+        {
+            try
+            {
+                var user =_accountService.GetUserByID(id);
+                
+               
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+            return RedirectToAction("CarDetail", "Car");
         }
     }
 }

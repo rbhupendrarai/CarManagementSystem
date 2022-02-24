@@ -60,11 +60,8 @@
                     <tr>
                         <th>
                         </th>
-                        <th>
+                        <th colspan="4">
                             <input type="search" placeholder="Search Name" id="txtCarName">
-                        </th>
-                        <th colspan="3">
-                            <input type="search" placeholder="Search Dispcription" id="txtDescription" />
                         </th>
 
                     </tr>
@@ -77,12 +74,15 @@
                             Discription
                         </th>
 
-                        <th sec:authorize="hasRole('Admin')">
-                            Edit
-                        </th>
-                        <th sec:authorize="hasRole('Admin')">
-                            Delete
-                        </th>
+                       
+                            <th>
+                                Edit
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+
+                        
 
 
                     </tr>

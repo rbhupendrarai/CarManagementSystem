@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using CarManagementSystem.Data.DTO;
 
 namespace CarManagementSystem.Service.Services
 {
@@ -31,19 +32,20 @@ namespace CarManagementSystem.Service.Services
                    
 
         }
-        public List<Model> GetModelDetail()
-        {                  
+        public async Task<IQueryable<CarModelSubModelDTO>> GetModel()
+        {
+            return from m in _context.Models
+                   join c in _context.Cars
+                   on m.CR_Id equals c.CR_Id
+                   select new CarModelSubModelDTO()
+                   {
+                       MO_Id = m.MO_Id,
+                       MO_Name = m.MO_Name,
+                       MO_Discription = m.MO_Discription,
+                       MO_Feature = m.MO_Feature,
+                       CR_Name = c.CR_Name
 
-            return _context.Models
-            .Select(model => new Model() 
-            {
-                MO_Id = model.MO_Id,
-                MO_Name = model.MO_Name,
-                MO_Discription = model.MO_Discription,
-                MO_Feature = model.MO_Feature,
-                CR_Id=model.CR_Id
-
-            }).ToList();
+                   };
         }
         public async Task<bool> AddModel(Model model)
         {

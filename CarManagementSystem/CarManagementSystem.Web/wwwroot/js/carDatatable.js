@@ -49,14 +49,11 @@ $(document).ready(function () {
         });
     
     $("#txtCarName").keyup(function () {
-        datatable.column(0).search($(this).val().toLowerCase(), 'CR_Name');
+        datatable.column(0).search($(this).val().toLowerCase());
         datatable.draw();
         
     });
-    $("#txtDescription").keyup(function () {
-        datatable.column(1).search($(this).val().toLowerCase(), 'CR_Description');
-        datatable.draw();
-    });
+
   
 });
     function ConfirmDelete(CR_Id) {
@@ -114,7 +111,6 @@ $("#SaveCar").click(function () {
             alert("Added Successfully");
             window.location.href = "/Car/CarDetail";
             $("#addCarModel").modal("hide");
-
         }
     });
 });

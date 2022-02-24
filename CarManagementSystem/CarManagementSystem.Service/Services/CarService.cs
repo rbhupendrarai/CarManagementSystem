@@ -14,17 +14,19 @@ namespace CarManagementSystem.Service.Services
         {
             _context = carManagementSystemDbContext;
         }
-        public List<Car> GetCarDetail()
-        {   
-            return _context.Cars
-            .Select(car => new Car()
-            {
-                CR_Id = car.CR_Id,
-                CR_Name = car.CR_Name,
-                CR_Discription = car.CR_Discription,            
+        public async Task<IQueryable<Car>> GetCarDetail() {
 
-            }).ToList();
+            return _context.Cars
+              .Select(car => new Car()
+              {
+                  CR_Id = car.CR_Id,
+                  CR_Name = car.CR_Name,
+                  CR_Discription = car.CR_Discription,
+
+              });
+
         }
+     
         public async Task<bool> AddCar(Car car)
         {
             try

@@ -46,22 +46,11 @@
         });
 
     $("#txtModelName").keyup(function () {
-        datatable.column(0).search($(this).val().toLowerCase(), 'MO_Name');
+        datatable.column(0).search($(this).val().toLowerCase());
         datatable.draw();
 
     });
-    $("#txtModelDescription").keyup(function () {
-        datatable.column(1).search($(this).val().toLowerCase(), 'MO_Description');
-        datatable.draw();
-    });
-    $("#txtModelFeature").keyup(function () {
-        datatable.column(2).search($(this).val().toLowerCase(), 'MO_Feature');
-        datatable.draw();
-    });
-    $("#txtCarSearch").keyup(function () {
-        datatable.column(3).search($(this).val().toLowerCase(), 'CR_Name');
-        datatable.draw();
-    });
+ 
 
 });
 
@@ -110,19 +99,29 @@ function UpdateModel(MO_Id) {
     });
 }
 $("#SaveModel").click(function () {
-    var data = $("#SubmitForm").serialize();
-    $.ajax({
-        type: "Post",
-        url: "/Model/AddOrEditModel",
-        data: data,
-        success: function (otput) {
-            alert("Added Successfully");
-            window.location.href = "/Model/ModelDetail";
-            $("#addModel").modal("hide");
+    debugger;
+    var Name,data,url;
+    Name = document.getElementById("#mname").value;
+    if (Name != null)
+    {
+        url = "/Model/AddOrEditModel";
+        data = $("#SubmitForm").serialize();
+    }
+    else {
+        alert("Please Fill All Detail");
+    }
 
-        }
-    });
+        $.ajax({
+            type: "Post",
+            url: url,
+            data: data,
+            success: function (otput) {
+                alert("Added Successfully");
+                window.location.href = "/Model/ModelDetail";
+                $("#addModel").modal("hide");
 
-})
+            },
+        });  
+});
 
 

@@ -14,18 +14,11 @@ namespace CarManagementSystem.Web.Controllers
 {
     public class CarController : Controller
     {
-        private readonly CarManagementSystemDbContext _context;
-
-        private readonly CarService _carService;
-        private readonly IHttpContextAccessor _contextAccessor;
-        public CarController(CarManagementSystemDbContext carManagementSystemDbContext, IHttpContextAccessor contextAccessor, CarService carService)
+        private readonly CarService _carService;      
+        public CarController(CarService carService)
         {
-            _carService = carService;
-            _contextAccessor = contextAccessor;
-            _context = carManagementSystemDbContext;
-        }
-
-      
+            _carService = carService;         
+        }     
 
         [HttpGet]
         [Authorize(Roles = "Admin,User")]
@@ -39,52 +32,49 @@ namespace CarManagementSystem.Web.Controllers
             {
                 throw;
             }
-
         }
-
         [HttpPost]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult GetCarDetail()
+        public async Task<IActionResult> GetCarDetail()
         {
-
-            var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
-            var start = HttpContext.Request.Form["start"].FirstOrDefault();
-            var length = HttpContext.Request.Form["length"].FirstOrDefault();
-            var sortColumn = HttpContext.Request.Form["columns[" + HttpContext.Request.Form["order[0][column]"].FirstOrDefault() +
-                                          "][name]"].FirstOrDefault();
-            string sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
-            var nameSearch = HttpContext.Request.Form["columns[0][search][value]"].FirstOrDefault();
-            var discriptionSearch = HttpContext.Request.Form["columns[1][search][value]"].FirstOrDefault();
-          
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = 0;
-            var carData = (from car in _context.Cars select car);
-            // var carData = _carService.GetCarDetail();
-
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+            try
             {
-                carData = carData.OrderBy(sortColumn + " " + sortColumnDirection);
-            }
+                var draw = HttpContext.Request.Form["draw"].FirstOrDefault();
+                var start = HttpContext.Request.Form["start"].FirstOrDefault();
+                var length = HttpContext.Request.Form["length"].FirstOrDefault();
+                var sortColumn = HttpContext.Request.Form["columns[" + HttpContext.Request.Form["order[0][column]"].FirstOrDefault() +
+                                              "][name]"].FirstOrDefault();
+                string sortColumnDirection = HttpContext.Request.Form["order[0][dir]"].FirstOrDefault();
+                var allSearch = HttpContext.Request.Form["columns[0][search][value]"].FirstOrDefault();
 
-            if (!string.IsNullOrEmpty(nameSearch))
+
+                int pageSize = length != null ? Convert.ToInt32(length) : 0;
+                int skip = start != null ? Convert.ToInt32(start) : 0;
+                int recordsTotal = 0;
+                // var carData = (from car in _context.Cars select car);           
+                var carData = await _carService.GetCarDetail();
+
+                if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+                {
+                    carData = carData.OrderBy(sortColumn + " " + sortColumnDirection);
+                }
+                if (!string.IsNullOrEmpty(allSearch))
+                {
+                    carData = carData.Where(m => m.CR_Name.Contains(allSearch)
+                                                || m.CR_Discription.Contains(allSearch)
+                                           );
+                }
+                recordsTotal = carData.Count();
+                var data = carData.Skip(skip).Take(pageSize).ToList();
+                var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
+                return Ok(JsonConvert.SerializeObject(jsonData));
+            }
+            catch (Exception ex)
             {
-                carData = carData.Where(m => m.CR_Name.Contains(nameSearch));
-
+                ViewBag.Message = ex.Message.ToString();
+                return RedirectToAction("AddOrEditCar", "Car");
             }
-            if (!string.IsNullOrEmpty(discriptionSearch))
-            {
-                carData = carData.Where(m => m.CR_Discription.Contains(discriptionSearch));
-
-            }
-       
-            recordsTotal = carData.Count();
-            var data = carData.Skip(skip).Take(pageSize).ToList();
-
-            var jsonData = new { draw = draw, recordsFiltered = recordsTotal, recordsTotal = recordsTotal, data = data };
-            return Ok(JsonConvert.SerializeObject(jsonData));
-
-
+         
         }
       
         [HttpPost]       
