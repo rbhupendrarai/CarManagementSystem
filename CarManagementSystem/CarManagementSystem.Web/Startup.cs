@@ -25,20 +25,20 @@ namespace CarManagementSystem.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-           
+
             services.AddMvc();
             services.AddDbContext<CarManagementSystemDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("connection")));
-           services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CarManagementSystemDbContext>();//Register Identity services
-           services.AddTransient<AccountService>();
-           services.AddTransient<CarService>();
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<CarManagementSystemDbContext>();//Register Identity services
+            services.AddTransient<AccountService>();
+            services.AddTransient<CarService>();
             services.AddTransient<ModelService>();
             services.AddTransient<SubModelService>();
             services.AddTransient<ImageService>();
             services.AddScoped<IUserService, UserService>();
-           //services.AddDistributedMemoryCache();
-           //services.AddSession();
-           services.AddControllersWithViews();
-           services.AddRazorPages(); 
+            //services.AddDistributedMemoryCache();
+            //services.AddSession();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
             services.AddControllers();
 
 

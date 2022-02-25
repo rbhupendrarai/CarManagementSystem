@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @using CarManagementSystem.Data
 
 @inject SignInManager<IdentityUser> SignInManager
@@ -28,33 +28,33 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 
 
-                    @if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
+@if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "Admin"))
                     {
 
-                        <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1">
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserDetail">User</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="CarDetail">Car</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Model" asp-action="ModelDetail">Model</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="SubModel" asp-action="SubModelDetail">Sub Model</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="ImageDetail">Image</a>
-                            </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="UserDetail">User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="CarDetail">Car</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Model" asp-action="ModelDetail">Model</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SubModel" asp-action="SubModelDetail">Sub Model</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Image" asp-action="ImageDetail">Image</a>
+                        </li>
 
                         </ul>
 
@@ -62,84 +62,84 @@
 
                             <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">   @ViewBag.userName Logout</a>
 
-                        </div>
+                            </div>
                     }
                     else if (SignInManager.IsSignedIn(User) && await UserManager.IsInRoleAsync(UserManager.GetUserAsync(User).Result, "User"))
 
                     {
-                        <ul class="navbar-nav flex-grow-1">
+                            <ul class="navbar-nav flex-grow-1">
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="CarDetail">Car</a>
-                            </li>
-                        </ul>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Home</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="CarDetail">Car</a>
+                                </li>
+                                </ul>
 
-                        <div class="navbar">
+                                <div class="navbar">
 
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">   @ViewBag.userName Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">   @ViewBag.userName Logout</a>
 
-                        </div>
+                                    </div>
                     }
                     else
                     {
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddUser">Register</a>
+                                    <ul class="navbar-nav flex-grow-1">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="AddUser">Register</a>
 
-                            </li>
+                                        </li>
 
-                        </ul>
-                    }
+                                        </ul>
+}
 
-                </div>
-            </div>
-        </nav>
-    </header>
+</div>
+</div>
+</nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+@RenderBody()
+</main>
+</div>
+
+<footer class="border-top footer text-muted">
     <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        &copy; 2022 - CarManagementSystem.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - CarManagementSystem.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
+</footer>
 
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <link href="~/lib/datatables.net-bs4/dataTables.bootstrap4.min.css" rel="stylesheet" />
-    <script src="~/lib/datatables.net-bs4/dataTables.bootstrap4.min.js"></script>
-    <script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
-    <script src="~/js/subModelDatatable.js"></script>
-    <script src="~/js/modelDatatable.js"></script>
-    <script src="~/js/carDatatable.js"></script>
-    <script src="~/js/userDataTable.js"></script>
-    <script src="~/js/imgDatatable.js"></script>
-    <script src="~/js/homeDataTable.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<link href="~/lib/datatables.net-bs4/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/lib/datatables.net-bs4/dataTables.bootstrap4.min.js"></script>
+<script src="~/lib/datatables.net/jquery.dataTables.min.js"></script>
+<script src="~/js/subModelDatatable.js"></script>
+<script src="~/js/modelDatatable.js"></script>
+<script src="~/js/carDatatable.js"></script>
+<script src="~/js/userDataTable.js"></script>
+<script src="~/js/imgDatatable.js"></script>
+<script src="~/js/homeDataTable.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 
 
-    @*<script>
+ @*<script>
+        window.history.forward();
+        function noBack() {
             window.history.forward();
-            function noBack() {
-                window.history.forward();
-            }
+        }
 
-        </script>*@
+    </script>*@
 </body>
 </html>

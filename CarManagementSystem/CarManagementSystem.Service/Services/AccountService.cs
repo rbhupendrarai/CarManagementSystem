@@ -20,12 +20,12 @@ namespace CarManagementSystem.Service.Services
 
         private readonly IUserService _userService;//get current loged user
         private readonly CarManagementSystemDbContext _context;
-        public AccountService(CarManagementSystemDbContext context,UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
+        public AccountService(CarManagementSystemDbContext context, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userService = userService;          
-            _context=context;
+            _userService = userService;
+            _context = context;
         }
         public async Task<IQueryable> GetUsers()
         {
@@ -35,15 +35,16 @@ namespace CarManagementSystem.Service.Services
                    on user.Id equals userRole.UserId
                    join role in _context.Roles
                    on userRole.RoleId equals role.Id
-                   select new { 
-                         Id=user.Id,
-                         LockDate=user.LockoutEnd,
-                         UserName=user.UserName,
-                         Email=user.Email,
-                         Role=role.Name     
-                   
+                   select new
+                   {
+                       Id = user.Id,
+                       LockDate = user.LockoutEnd,
+                       UserName = user.UserName,
+                       Email = user.Email,
+                       Role = role.Name
+
                    };
-        }        
+        }
 
         public async Task<bool> CreateUser(RegisterVModel registerVModel)
         {
@@ -102,7 +103,7 @@ namespace CarManagementSystem.Service.Services
             }
 
         }
-       
+
         public async Task<bool> LoginUser(LoginVModel loginVModel)
         {
             try
@@ -126,12 +127,12 @@ namespace CarManagementSystem.Service.Services
             return true;
         }
 
-        
-         public async Task<bool> GetUserByID(string id)
-         {
-            var result= _context.Users.Find(id);
-            var cntResult= result.Id.Count();
-            var GetActiveStatus= _context.Users.Where(lockDate => lockDate.LockoutEnd != null && lockDate.Id.Contains(id));//Alerdy Deactive try to Active
+
+        public async Task<bool> GetUserByID(string id)
+        {
+            var result = _context.Users.Find(id);
+            var cntResult = result.Id.Count();
+            var GetActiveStatus = _context.Users.Where(lockDate => lockDate.LockoutEnd != null && lockDate.Id.Contains(id));//Alerdy Deactive try to Active
             var cntActiveStatus = GetActiveStatus.Count();
             var GetDeactiveStatus = _context.Users.Where(lockDate => lockDate.LockoutEnd == null && lockDate.Id.Contains(id));//Alerdy Active try to DeActive
             var cntDeactiveStatus = GetDeactiveStatus.Count();
@@ -139,7 +140,7 @@ namespace CarManagementSystem.Service.Services
             {
                 if (cntActiveStatus > 0)
                 {
-                    result.LockoutEnd= DateTime.Now;                 
+                    result.LockoutEnd = DateTime.Now;
                     await _context.SaveChangesAsync();
                 }
                 if (cntDeactiveStatus > 0)
@@ -154,7 +155,7 @@ namespace CarManagementSystem.Service.Services
 
 
         }
-    
+
 
         public async Task<bool> Logout()
         {

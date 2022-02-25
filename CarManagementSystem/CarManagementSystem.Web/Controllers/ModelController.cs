@@ -13,14 +13,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace CarManagementSystem.Web.Controllers
 {
-   
+
     public class ModelController : Controller
     {
 
         private readonly CarManagementSystemDbContext _context;
         private readonly ModelService _modelService;
-      
-        public ModelController(ModelService modelService,CarManagementSystemDbContext context )
+
+        public ModelController(ModelService modelService, CarManagementSystemDbContext context)
         {
             _modelService = modelService;
             _context = context;
@@ -31,7 +31,7 @@ namespace CarManagementSystem.Web.Controllers
         }
 
         [HttpGet]
-       
+
         public IActionResult ModelDetail()
         {
             var list = _modelService.GetCarList();
@@ -76,12 +76,12 @@ namespace CarManagementSystem.Web.Controllers
             {
                 modelData = modelData.Where(m => m.MO_Name.Contains(nameSearch)
                                             || m.MO_Discription.Contains(nameSearch)
-                                           ||  m.MO_Feature.Contains(nameSearch)
+                                           || m.MO_Feature.Contains(nameSearch)
                                            || m.CR_Name.Contains(nameSearch)
                 );
 
             }
-        
+
             recordsTotal = modelData.Count();
             var data = modelData.Skip(skip).Take(pageSize).ToList();
 

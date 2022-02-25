@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CarManagementSystem.Data.Data;
 using CarManagementSystem.Data.Models;
+using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 namespace CarManagementSystem.Service.Services
 {
@@ -27,16 +32,44 @@ namespace CarManagementSystem.Service.Services
 
         }
      
-        public async Task<bool> AddCar(Car car)
+        public async Task<bool> AddCar(Car car,IFormFile files)
         {
             try
             {
-                car.CreatedBy ="Admin";
-                car.CreatedDate = DateTime.Now;
-                car.ModifiedBy = "Admin";
-                car.ModifiedDate = DateTime.Now;
-                var result = await _context.Cars.AddAsync(car);                
-                await _context.SaveChangesAsync();
+                if (files != null)
+                {
+                    var csvTable = new DataTable();
+                    var data = new MemoryStream();
+                    await files.CopyToAsync(data);
+                    data.Position = 0;
+                    TextReader reader = new StreamReader(data);
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        var records = csv.GetRecords<Car>().ToList();
+                        foreach (var item in records)
+                        {
+                            //check if the user has been existing in db 
+                            car = await _context.Cars.FindAsync(item.CR_Name);
+
+                            if (car == null)
+                            {
+                                car = new Car
+                                {
+                                    CR_Name = item.CR_Name,
+                                    CR_Discription = item.CR_Discription,
+
+                                };
+                                car.CreatedBy = "Admin";
+                                car.CreatedDate = DateTime.Now;
+                                car.ModifiedBy = "Admin";
+                                car.ModifiedDate = DateTime.Now;
+                                await _context.Cars.AddAsync(car);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                    }
+                }
+              
                 return true;
             }
             catch (Exception ex)

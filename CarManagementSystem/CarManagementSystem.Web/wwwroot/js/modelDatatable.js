@@ -50,7 +50,7 @@
         datatable.draw();
 
     });
- 
+
 
 });
 
@@ -100,10 +100,9 @@ function UpdateModel(MO_Id) {
 }
 $("#SaveModel").click(function () {
     debugger;
-    var Name,data,url;
+    var Name, data, url;
     Name = document.getElementById("#mname").value;
-    if (Name != null)
-    {
+    if (Name != null) {
         url = "/Model/AddOrEditModel";
         data = $("#SubmitForm").serialize();
     }
@@ -111,17 +110,17 @@ $("#SaveModel").click(function () {
         alert("Please Fill All Detail");
     }
 
-        $.ajax({
-            type: "Post",
-            url: url,
-            data: data,
-            success: function (otput) {
-                alert("Added Successfully");
-                window.location.href = "/Model/ModelDetail";
-                $("#addModel").modal("hide");
+    $.ajax({
+        type: "Post",
+        url: url,
+        data: data,
+        success: function (otput) {
+            alert("Added Successfully");
+            window.location.href = "/Model/ModelDetail";
+            $("#addModel").modal("hide");
 
-            },
-        });  
+        },
+    });
 });
 
 

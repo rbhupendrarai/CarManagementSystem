@@ -78,7 +78,7 @@ namespace CarManagementSystem.Web.Controllers
         }
       
         [HttpPost]       
-        public async Task<IActionResult> AddOrEditCar(Car car)
+        public async Task<IActionResult> AddOrEditCar(Car car,IFormFile files)
         {    
             
             var output = false;
@@ -99,9 +99,10 @@ namespace CarManagementSystem.Web.Controllers
                    
                     
                 }
+                
                 else
                 {
-                    var result = await _carService.AddCar(car);
+                    var result = await _carService.AddCar(car,files);
                     if (result == true)
                     {
                         ViewBag.Message = "Add Successfully";

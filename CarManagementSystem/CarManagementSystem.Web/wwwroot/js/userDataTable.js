@@ -51,9 +51,4 @@ function UpdateUser(Id) {
         }
     });
 
-
-
-
-
-
 };
